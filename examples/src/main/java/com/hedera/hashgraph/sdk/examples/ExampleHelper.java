@@ -45,7 +45,7 @@ public final class ExampleHelper {
         var len = hex.length();
         var data = new byte[len / 2];
 
-        var i = 0;
+        int i = 0;
 
         //noinspection NullableProblems
         for (var c : (Iterable<Integer>) hex.chars()::iterator) {
