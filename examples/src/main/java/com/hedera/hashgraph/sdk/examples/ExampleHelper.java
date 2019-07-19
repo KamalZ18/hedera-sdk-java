@@ -34,9 +34,9 @@ public final class ExampleHelper {
       change this string to where you would like to place your node.env file.*/
     try {
     dotEnvFile1 = Dotenv.configure()
-					    .directory("/data/local/tmp")
-              .filename("node.env")
-              .load();
+                 .directory("/data/local/tmp")
+                 .filename("node.env")
+                 .load();
     } catch (Exception Exp1) {
       Log.i (LogTag,"getEnv --> Dotenv --> Exception: " + Exp1.toString());
       Log.i (LogTag,"getEnv --> Dotenv Error: Cannot find node.env file.");
@@ -61,17 +61,34 @@ public final class ExampleHelper {
 
   public static Client createHederaClient() {
   /* To connect to a network with more nodes, add additional entries to the network map
-     This method connects to a network with 1 nodes. */
+     This method connects to a network with 4 nodes. */
     Client client1;
+    AccountId nodeId1,
+	          nodeId2,
+	          nodeId3,
+	          nodeId4;
     String nodeAddres1,
- 
-    nodeAddres1 = Objects.requireNonNull(getEnv().get("NODE_ADDRESS"));
+           nodeAddres2,
+           nodeAddres3,
+           nodeAddres4;
+      
+    nodeAddres1 = nodeAddres2 = nodeAddres3 = nodeAddres4 = "";
     
-    /*Create a new Client with 1 node.*/
-    client1 = new Client(Map.of(getNodeId(), nodeAddres1));
+    nodeId1 = AccountId.fromString(Objects.requireNonNull(getEnv().get("NODE_ID")));
+    nodeId2 = AccountId.fromString(Objects.requireNonNull(getEnv().get("NODE_ID2")));
+    nodeId3 = AccountId.fromString(Objects.requireNonNull(getEnv().get("NODE_ID3")));
+    nodeId4 = AccountId.fromString(Objects.requireNonNull(getEnv().get("NODE_ID4")));
 
-    // Defaults the operator account ID and key such that all generated transactions will be paid for
-    // by this account and be signed by this key
+    nodeAddres1 = Objects.requireNonNull(getEnv().get("NODE_ADDRESS"));
+    nodeAddres2 = Objects.requireNonNull(getEnv().get("NODE_ADDRESS2"));
+    nodeAddres3 = Objects.requireNonNull(getEnv().get("NODE_ADDRESS3"));
+    nodeAddres4 = Objects.requireNonNull(getEnv().get("NODE_ADDRESS4"));
+    
+    /*Create a new Client with 4 nodes.*/
+    client1 = new Client(Map.of(nodeId1, nodeAddres1, nodeId2, nodeAddres2, nodeId3, nodeAddres3, nodeId4, nodeAddres4));
+
+    /* Defaults the operator account ID and key such that all generated transactions will be paid for
+       by this account and be signed by this key*/
     client1.setOperator(getOperatorId(), getOperatorKey());
 
     return (client1);
