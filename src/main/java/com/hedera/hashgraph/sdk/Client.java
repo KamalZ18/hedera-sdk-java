@@ -33,6 +33,7 @@ public final class Client {
     @Nullable
     private Ed25519PrivateKey operatorKey;
 
+    /*Client constructor*/
     public Client(Map<AccountId, String> nodes) {
 
         if (nodes.isEmpty()) {
@@ -41,8 +42,8 @@ public final class Client {
 
         channels = nodes.entrySet()
             .stream()
-            .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, t -> new Node(t.getKey(), t.getValue())));
-    }
+            .collect(Collectors.toMap(Map.Entry::getKey, tNode -> new Node(tNode.getKey(), tNode.getValue())));
+    }/*constructor Client*/
 
     public Client setMaxTransactionFee(@Nonnegative long maxTransactionFee) {
         if (maxTransactionFee <= 0) {
@@ -148,4 +149,4 @@ public final class Client {
             .addRecipient(recipient, amount)
             .executeAsync(onSuccess, onError);
     }
-}
+}/*Client class*/
