@@ -7,13 +7,14 @@ import io.grpc.ManagedChannelBuilder;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-class Node {
+public class Node {
     final AccountId accountId;
     final String address;
 
     @Nullable
     private volatile ManagedChannel channel;
 
+    /*Constructor*/
     Node(AccountId accountId, String address) {
         this.accountId = accountId;
         this.address = address;
@@ -34,4 +35,4 @@ class Node {
 
         return Objects.requireNonNull(channel);
     }
-}
+}/*Node*/
