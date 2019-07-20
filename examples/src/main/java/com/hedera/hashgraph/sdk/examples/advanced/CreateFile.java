@@ -8,26 +8,34 @@ import java.time.Duration;
 import java.time.Instant;
 
 public final class CreateFile {
+    /*Constructor*/
     private CreateFile() { }
 
     public static void main(String[] args) throws HederaException {
-        var operatorKey = ExampleHelper.getOperatorKey();
-        var client = ExampleHelper.createHederaClient();
+      FileId newFileId1;
+      FileCreateTransaction filTx1;
+      TransactionReceipt txReceipt1;
+      Client hederaClient1;
+      Ed25519PrivateKey operatorKey1;
+      byte[] fileContents1;
 
-        // The file is required to be a byte array,
-        // you can easily use the bytes of a file instead.
-        var fileContents = "Hedera hashgraph is great!".getBytes();
+      operatorKey1 = ExampleHelper.getOperatorKey();
+      hederaClient = ExampleHelper.createHederaClient();
 
-        var tx = new FileCreateTransaction(client).setExpirationTime(
-            Instant.now()
-                .plus(Duration.ofSeconds(2592000)))
-            // Use the same key as the operator to "own" this file
-            .addKey(operatorKey.getPublicKey())
-            .setContents(fileContents);
+      /* The file is required to be a byte array,
+         you can easily use the bytes of a file instead.*/
+      fileContents1 = "Hedera hashgraph is great!".getBytes();
 
-        var receipt = tx.executeForReceipt();
-        var newFileId = receipt.getFileId();
+      filTx1 = new FileCreateTransaction(client).setExpirationTime(
+               Instant.now()
+               .plus(Duration.ofSeconds(2592000)))
+               // Use the same key as the operator to "own" this file
+               .addKey(operatorKey1.getPublicKey())
+               .setContents(fileContents1);
 
-        System.out.println("file: " + newFileId);
-    }
-}
+        txReceipt1 = filTx1.executeForReceipt();
+        newFileId1 = txReceipt1.getFileId();
+
+        System.out.println("New file created OK; New File ID: " + newFileId);
+    }/*main*/
+}/*CreateFile*/
