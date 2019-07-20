@@ -74,7 +74,7 @@ public final class CallParams<Kind> {
     }
 
     private static ByteString encodeString(String string) {
-        final var strBytes = ByteString.copyFromUtf8(string);
+        final ByteString strBytes = ByteString.copyFromUtf8(string);
         // prepend the size of the string in UTF-8 bytes
         return int256(strBytes.size(), 32)
             .concat(rightPad32(strBytes));
@@ -86,7 +86,7 @@ public final class CallParams<Kind> {
     }
 
     private static void checkFixedArrayLen(int fixedLen, Object array) {
-        final var len = Array.getLength(array);
+        final int len = Array.getLength(array);
 
         if (fixedLen != len) {
             throw new IllegalArgumentException(
@@ -96,7 +96,7 @@ public final class CallParams<Kind> {
 
     private static ByteString encodeArray(Stream<ByteString> elements, boolean prependLen) {
         if (prependLen) {
-            final var list = elements.collect(Collectors.toList());
+            final List<ByteString> list = elements.collect(Collectors.toList());
 
             return int256(list.size(), 32)
                 .concat(ByteString.copyFrom(list));
