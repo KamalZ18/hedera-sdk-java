@@ -14,11 +14,11 @@ public class Node {
     @Nullable
     private volatile ManagedChannel channel;
 
-    /*Constructor*/
-    Node(AccountId accountId, String address) {
+    /*Constructor Node*/
+    public Node(AccountId accountId, String address) {
         this.accountId = accountId;
         this.address = address;
-    }
+    }/*Node constructor*/
 
     ManagedChannel getChannel() {
         // only build the channel once; check before locking the mutex
