@@ -75,42 +75,57 @@ public final class Client {
     }
 
     Node pickNode() {
-        if (channels.isEmpty()) {
+      Iterator<Node> channelIter1;
+      int idx, r;
+
+      idx = r = 0;
+      if (channels.isEmpty()) {
             throw new IllegalStateException("List of channels has become empty");
-        }
+      }
+        
+      /*select a Node at random*/
+      r = random.nextInt(channels.size());
+        
+      /*Set up a Node Iterator*/
+      channelIter1 = channels.values().iterator();
 
-        var r = random.nextInt(channels.size());
-        var channelIter = channels.values()
-            .iterator();
+      /*Traverse through the channel elements (nodes) using the iterator,
+	    until we get to the randomly selected node.*/
 
-        for (int i = 1; i < r; i++) {
-            channelIter.next();
-        }
+      for (idx = 1; idx < r; idx++) {
+            channelIter1.next();
+      }/*for loop*/
 
-        return channelIter.next();
-    }
+        return (channelIter1.next());
+    }/*pickNode*/
 
     Node getNodeForId(AccountId node) {
-        var selectedChannel = channels.get(node);
+      Node selectedChannel1;
 
-        if (selectedChannel == null) {
-            throw new IllegalArgumentException("Node Id does not exist");
-        }
+	  selectedChannel1 = null;
+      selectedChannel1 = channels.get(node);
 
-        return selectedChannel;
-    }
+      if (selectedChannel1 == null) {
+         throw new IllegalArgumentException("Node Id does not exist");
+      }
+
+      return (selectedChannel1);
+    }/*getNodeForId*/
 
     //
     // Simplified interface intended for high-level, opinionated operation
     //
 
     public AccountId createAccount(Key publicKey, long initialBalance) throws HederaException, HederaNetworkException {
-        var receipt = new AccountCreateTransaction(this).setKey(publicKey)
+      TransactionReceipt receipt1;
+        
+      receipt1 = null;
+      receipt1 = new AccountCreateTransaction(this).setKey(publicKey)
             .setInitialBalance(initialBalance)
             .executeForReceipt();
 
-        return receipt.getAccountId();
-    }
+        return (receipt1.getAccountId());
+    }/*createAccount*/
 
     public void createAccountAsync(Key publicKey, long initialBalance, Consumer<AccountId> onSuccess, Consumer<HederaThrowable> onError) {
         new AccountCreateTransaction(this).setKey(publicKey)
