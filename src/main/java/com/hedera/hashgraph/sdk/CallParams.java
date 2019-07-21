@@ -74,11 +74,11 @@ public final class CallParams<Kind> {
     }
 
     private static ByteString encodeString(String string) {
-        final ByteString strBytes = ByteString.copyFromUtf8(string);
-        // prepend the size of the string in UTF-8 bytes
-        return int256(strBytes.size(), 32)
-            .concat(rightPad32(strBytes));
-    }
+      final ByteString strBytes;
+      strBytes = ByteString.copyFromUtf8(string);
+      // prepend the size of the string in UTF-8 bytes
+      return (int256(strBytes.size(), 32).concat(rightPad32(strBytes)));
+    }/*encodeString*/
 
     private static ByteString encodeBytes(byte[] bytes) {
         return int256(bytes.length, 32)
@@ -92,7 +92,7 @@ public final class CallParams<Kind> {
             throw new IllegalArgumentException(
                 "fixedLen (" + fixedLen + ") does not match string length (" + len + ")");
         }
-    }
+    }/*checkFixedArrayLen*/
 
     private static ByteString encodeArray(Stream<ByteString> elements, boolean prependLen) {
         if (prependLen) {
@@ -1074,5 +1074,4 @@ public final class CallParams<Kind> {
             this.isDynamic = isDynamic;
         }
     }
-
-}
+}/*CallParams*/
