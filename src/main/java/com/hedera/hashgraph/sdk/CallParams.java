@@ -83,7 +83,7 @@ public final class CallParams<Kind> {
     private static ByteString encodeBytes(byte[] bytes) {
         return int256(bytes.length, 32)
             .concat(rightPad32(ByteString.copyFrom(bytes)));
-    }
+    }/*encodeBytes*/
 
     private static void checkFixedArrayLen(int fixedLen, Object array) {
         final int len = Array.getLength(array);
@@ -95,15 +95,17 @@ public final class CallParams<Kind> {
     }/*checkFixedArrayLen*/
 
     private static ByteString encodeArray(Stream<ByteString> elements, boolean prependLen) {
-        if (prependLen) {
-            final List<ByteString> list = elements.collect(Collectors.toList());
-
-            return int256(list.size(), 32)
-                .concat(ByteString.copyFrom(list));
-        } else {
-            return ByteString.copyFrom(elements::iterator);
-        }
-    }
+      final List<ByteString> byteStrList1;
+      ByteString strBytesRetVal1;
+      
+      if (prependLen) {
+         byteStrList1 = elements.collect(Collectors.toList());
+         strBytesRetVal1 = int256(byteStrList1.size(), 32).concat(ByteString.copyFrom(byteStrList1));
+      } else {
+            strBytesRetVal1 = ByteString.copyFrom(elements::iterator);
+      }
+      return (strBytesRetVal1);
+    }/*encodeArray*/
 
     private static ByteString encodeDynArr(List<ByteString> elements, boolean prependLen) {
         final var offsetsLen = elements.size() + (prependLen ? 1 : 0);
