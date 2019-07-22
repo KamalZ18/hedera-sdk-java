@@ -108,24 +108,32 @@ public final class CallParams<Kind> {
     }/*encodeArray*/
 
     private static ByteString encodeDynArr(List<ByteString> elements, boolean prependLen) {
-        final var offsetsLen = elements.size() + (prependLen ? 1 : 0);
+      final List<ByteString> offsets1;
+      final int offsetsLen;
+  	  ByteString byteStrElm1;
+      long currOffset;
+	    int elementSize1, idx;
 
-        final var offsets = new ArrayList<ByteString>(offsetsLen);
+      elementSize1 = elements.size();
+      offsetsLen = elements.size() + (prependLen ? 1 : 0);
 
-        if (prependLen) {
-            offsets.add(int256(elements.size(), 32));
-        }
+      offsets1 = new ArrayList<>(offsetsLen);
 
-        // points to start of dynamic segment
-        long currOffset = offsetsLen * 32;
+      if (prependLen) {
+          offsets1.add(int256(elements.size(), 32));
+      }
 
-        for (final var elem : elements) {
-            offsets.add(int256(currOffset, 64));
-            currOffset += elem.size();
-        }
+      //currOffset points to start of dynamic segment
+      currOffset = offsetsLen * 32;
 
-        return ByteString.copyFrom(offsets).concat(ByteString.copyFrom(elements));
-    }
+      for (idx=0; idx<elementSize1; idx++) {
+  	      byteStrElm1 = elements.get(idx);
+          offsets1.add(int256(currOffset, 64));
+          currOffset += byteStrElm1.size();
+      }/*for loop*/
+
+      return (ByteString.copyFrom(offsets).concat(ByteString.copyFrom(elements)));
+    }/*encodeDynArr*/
 
     /**
      * Add a parameter of type {@code string[]}.
