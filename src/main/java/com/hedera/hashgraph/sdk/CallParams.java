@@ -135,23 +135,22 @@ public final class CallParams<Kind> {
       return (ByteString.copyFrom(offsets).concat(ByteString.copyFrom(elements)));
     }/*encodeDynArr*/
 
-    /**
-     * Add a parameter of type {@code string[]}.
-     *
-     * @throws NullPointerException if any value in `strings` is null
-     */
+    /** Add a parameter of type {@code string[]}.
+     * @throws NullPointerException if any value in `strings` is null*/
     public CallParams<Kind> addStringArray(String[] strings) {
-        final var byteStrings = Arrays.stream(strings)
-            .map(CallParams::encodeString)
-            .collect(Collectors.toList());
+	    final ByteString argBytes1;
+      List<ByteString> byteStrings1;
 
-        final var argBytes = encodeDynArr(byteStrings, true);
+      byteStrings1 = null;
+      byteStrings1 = Arrays.stream(strings).map(CallParams::encodeString).collect(Collectors.toList());
 
-        addParamType("string[]");
-        args.add(new Argument(argBytes, true));
+      argBytes1 = encodeDynArr(byteStrings1, true);
 
-        return this;
-    }
+      addParamType("string[]");
+      args.add(new Argument(argBytes1, true));
+
+      return this;
+    }/*addStringArray*/
 
     /**
      * Add a parameter of type {@code string[N]}, a fixed-length array of strings.
