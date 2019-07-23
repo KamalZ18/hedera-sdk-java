@@ -233,79 +233,73 @@ public final class CallParams<Kind> {
         // boolean encodes to `uint8` of values [0, 1]
         args.add(new Argument(int256(bool ? 1 : 0, 8), false));
         return this;
-    }
+    }/*addBool*/
 
     private static void checkIntWidth(int width) {
         if (width % 8 != 0 || width < 8 || width > 256) {
             throw new IllegalArgumentException(
                 "Solidity integer width must be a multiple of 8, in the closed range [8, 256]");
         }
-    }
+    }/*checkIntWidth*/
 
     private static void checkUnsignedVal(long unsignedVal) {
         if (unsignedVal < 0) {
             throw new IllegalArgumentException("addUint() does not accept negative values");
         }
-    }
+    }/*checkUnsignedVal*/
 
     private static void checkBigInt(BigInteger val, int width, boolean signed) {
-        checkIntWidth(width);
+      final int actualBitLen1;
 
-        // bitLength() does not include the sign bit
-        final var actualBitLen = val.bitLength() + (signed ? 1 : 0);
+      checkIntWidth(width);
 
-        if (actualBitLen > 256) {
-            throw new IllegalArgumentException("BigInteger out of range for Solidity integers");
-        }
+      // bitLength() does not include the sign bit
+      actualBitLen1 = val.bitLength() + (signed ? 1 : 0);
 
-        if (width < actualBitLen) {
-            throw new IllegalArgumentException(
-                "BigInteger.bitLength() is greater than the nominal parameter width");
-        }
-    }
+      if (actualBitLen1 > 256) {
+          throw new IllegalArgumentException("BigInteger out of range for Solidity integers");
+      }
 
-    /**
-     * Add an integer as an signed {@code intN} param, explicitly setting the parameter width.
+      if (width < actualBitLen1) {
+          throw new IllegalArgumentException(
+              "BigInteger.bitLength() is greater than the nominal parameter width");
+      }
+    }/*checkBigInt*/
+
+    /** Add an integer as an signed {@code intN} param, explicitly setting the parameter width.
      * <p>
      * The value will be truncated to the last {@code width} bits, the same as Java's
      * behavior when casting from a larger integer type to a smaller one. When passing a smaller
      * integer type, Java will widen it by sign-extending so if it is truncated again it should
      * still result in the same two's complement value.
-     *
      * @param width the nominal bit width for encoding the integer type in the function selector,
      *              e.g. {@code width = 128} produces a param type of {@code int128};
      *              must be a multiple of 8 and between 8 and 256.
-     * @throws IllegalArgumentException if {@code width} is not in a valid range (see above).
-     */
+     * @throws IllegalArgumentException if {@code width} is not in a valid range (see above).*/
     public CallParams<Kind> addInt(long value, int width) {
-        checkIntWidth(width);
+      checkIntWidth(width);
 
-        addParamType("int" + width);
-        args.add(new Argument(int256(value, width), false));
+      addParamType("int" + width);
+      args.add(new Argument(int256(value, width), false));
+      return this;
+    }/*addInt*/
 
-        return this;
-    }
-
-    /**
-     * Add an arbitrary precision integer as a signed {@code intN} param, explicitly
+    /** Add an arbitrary precision integer as a signed {@code intN} param, explicitly
      * setting the parameter width.
-     *
      * @param width the nominal bit width for encoding the integer type in the function selector,
      *              e.g. {@code width = 128} produces a param type of {@code int128};
      *              must be a multiple of 8 and between 8 and 256.
      * @throws IllegalArgumentException if {@code bigInt.bitLength() > 255}
      *                                  (max range including the sign bit),
      *                                  {@code width < uint.bitLength()} or {@code width} is not in
-     *                                  a valid range (see above).
-     */
+     *                                  a valid range (see above).*/
     public CallParams<Kind> addInt(BigInteger bigInt, int width) {
-        checkBigInt(bigInt, width, true);
+      checkBigInt(bigInt, width, true);
 
-        addParamType("int" + width);
-        args.add(new Argument(int256(bigInt), false));
-
-        return this;
-    }
+      addParamType("int" + width);
+      args.add(new Argument(int256(bigInt), false));
+      return this;
+    }/*addInt*/
 
     private static ByteString encodeIntArray(int intWidth, long[] intArray, boolean prependLen) {
         checkIntWidth(intWidth);
