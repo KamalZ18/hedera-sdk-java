@@ -330,36 +330,38 @@ public final class CallParams<Kind> {
     }/*encodeIntArray*/
 
     private static ByteString encodeUintArray(int intWidth, long[] intArray, boolean prependLen) {
-        checkIntWidth(intWidth);
+      final ByteString arrayBytes1;
+      checkIntWidth(intWidth);
 
-        final var arrayBytes = ByteString.copyFrom(
+      arrayBytes1 = ByteString.copyFrom(
             Arrays.stream(intArray).mapToObj(i -> {
                 checkUnsignedVal(i);
                 return int256(i, intWidth);
             }).collect(Collectors.toList()));
 
-        if (prependLen) {
-            return int256(intArray.length, 32).concat(arrayBytes);
-        } else {
-            return arrayBytes;
-        }
-    }
+      if (prependLen) {
+          return int256(intArray.length, 32).concat(arrayBytes1);
+      } else {
+          return arrayBytes1;
+      }
+    }/*encodeUintArray*/
 
     private static ByteString encodeUintArray(int intWidth, BigInteger[] intArray, boolean prependLen) {
-        checkIntWidth(intWidth);
+	    final ByteString arrayBytes1;
+      checkIntWidth(intWidth);
 
-        final var arrayBytes = ByteString.copyFrom(
+      arrayBytes1 = ByteString.copyFrom(
             Arrays.stream(intArray).map(i -> {
                 checkUnsignedVal(i.signum());
                 return uint256(i);
             }).collect(Collectors.toList()));
 
-        if (prependLen) {
-            return int256(intArray.length, 32).concat(arrayBytes);
-        } else {
-            return arrayBytes;
-        }
-    }
+      if (prependLen) {
+          return int256(intArray.length, 32).concat(arrayBytes1);
+      } else {
+          return arrayBytes1;
+      }
+    }/*encodeUintArray*/
 
     /**
      * Add an integer array as an signed {@code intN[]} param, explicitly setting the integer
