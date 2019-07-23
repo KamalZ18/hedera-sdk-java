@@ -302,32 +302,32 @@ public final class CallParams<Kind> {
     }/*addInt*/
 
     private static ByteString encodeIntArray(int intWidth, long[] intArray, boolean prependLen) {
-        checkIntWidth(intWidth);
+	    final ByteString arrayBytes1;
 
-        final var arrayBytes = ByteString.copyFrom(
-            Arrays.stream(intArray).mapToObj(i -> int256(i, intWidth))
-                .collect(Collectors.toList()));
+      checkIntWidth(intWidth);
 
-        if (prependLen) {
-            return int256(intArray.length, 32).concat(arrayBytes);
-        } else {
-            return arrayBytes;
-        }
-    }
+      arrayBytes1 = ByteString.copyFrom(Arrays.stream(intArray).mapToObj(i -> int256(i, intWidth)).collect(Collectors.toList()));
+
+      if (prependLen) {
+          return int256(intArray.length, 32).concat(arrayBytes1);
+      } else {
+          return arrayBytes1;
+      }
+    }/*encodeIntArray*/
 
     private static ByteString encodeIntArray(int intWidth, BigInteger[] intArray, boolean prependLen) {
-        checkIntWidth(intWidth);
+	    final ByteString arrayBytes1;
 
-        final var arrayBytes = ByteString.copyFrom(
-            Arrays.stream(intArray).map(CallParams::int256)
-                .collect(Collectors.toList()));
+      checkIntWidth(intWidth);
 
-        if (prependLen) {
-            return int256(intArray.length, 32).concat(arrayBytes);
-        } else {
-            return arrayBytes;
-        }
-    }
+      arrayBytes1 = ByteString.copyFrom(Arrays.stream(intArray).map(CallParams::int256).collect(Collectors.toList()));
+
+      if (prependLen) {
+          return int256(intArray.length, 32).concat(arrayBytes1);
+      } else {
+          return arrayBytes1;
+      }
+    }/*encodeIntArray*/
 
     private static ByteString encodeUintArray(int intWidth, long[] intArray, boolean prependLen) {
         checkIntWidth(intWidth);
