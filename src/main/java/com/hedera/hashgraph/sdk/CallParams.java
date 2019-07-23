@@ -211,23 +211,22 @@ public final class CallParams<Kind> {
       return this;
     }/*addBytesArray*/
 
-    /**
-     * Add a parameter of type {@code bytes[N]}, a fixed-length array of byte-strings.
-     */
+    /** Add a parameter of type {@code bytes[N]}, a fixed-length array of byte-strings.*/
     public CallParams<Kind> addBytesArray(byte[][] param, int fixedLen) {
-        checkFixedArrayLen(fixedLen, param);
+	    final ByteString argBytes1;
+      List<ByteString> byteStrings1;
 
-        final var byteStrings = Arrays.stream(param)
-            .map(CallParams::encodeBytes)
-            .collect(Collectors.toList());
+      checkFixedArrayLen(fixedLen, param);
 
-        final var argBytes = encodeDynArr(byteStrings, false);
+      byteStrings1 = Arrays.stream(param).map(CallParams::encodeBytes).collect(Collectors.toList());
 
-        addParamType("bytes[" + fixedLen + "]");
-        args.add(new Argument(argBytes, true));
+      argBytes1 = encodeDynArr(byteStrings1, false);
 
-        return this;
-    }
+      addParamType("bytes[" + fixedLen + "]");
+      args.add(new Argument(argBytes1, true));
+
+      return this;
+    }/*addBytesArray*/
 
     public CallParams<Kind> addBool(boolean bool) {
         addParamType("bool");
