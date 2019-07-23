@@ -199,19 +199,17 @@ public final class CallParams<Kind> {
       return this;
     }/*addBytes*/
 
-    /**
-     * Add a parameter of type {@code bytes[]}, an array of byte-strings.
-     */
+    /** Add a parameter of type {@code bytes[]}, an array of byte-strings.*/
     public CallParams<Kind> addBytesArray(byte[][] param) {
-        final var byteArrays = Arrays.stream(param)
-            .map(CallParams::encodeBytes)
-            .collect(Collectors.toList());
+      List<ByteString> byteArrays1;
 
-        addParamType("bytes[]");
-        args.add(new Argument(encodeDynArr(byteArrays, true), true));
+      byteArrays1 = Arrays.stream(param).map(CallParams::encodeBytes).collect(Collectors.toList());
 
-        return this;
-    }
+      addParamType("bytes[]");
+      args.add(new Argument(encodeDynArr(byteArrays1, true), true));
+
+      return this;
+    }/*addBytesArray*/
 
     /**
      * Add a parameter of type {@code bytes[N]}, a fixed-length array of byte-strings.
