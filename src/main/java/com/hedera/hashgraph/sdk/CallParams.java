@@ -152,60 +152,52 @@ public final class CallParams<Kind> {
       return this;
     }/*addStringArray*/
 
-    /**
-     * Add a parameter of type {@code string[N]}, a fixed-length array of strings.
-     *
+    /** Add a parameter of type {@code string[N]}, a fixed-length array of strings.
      * @param fixedLen the length of the fixed-size array type.
      * @throws IllegalArgumentException if {@code fixedLen != strings.length}
-     * @throws NullPointerException     if any value in `strings` is null
-     */
+     * @throws NullPointerException     if any value in `strings` is null*/
     public CallParams<Kind> addStringArray(String[] strings, int fixedLen) {
-        checkFixedArrayLen(fixedLen, strings);
+	    final ByteString argBytes1;
+      List<ByteString> byteStrings1;
 
-        final var byteStrings = Arrays.stream(strings)
-            .map(CallParams::encodeString)
-            .collect(Collectors.toList());
+      checkFixedArrayLen(fixedLen, strings);
 
-        final var argBytes = encodeDynArr(byteStrings, false);
+      byteStrings1 = Arrays.stream(strings).map(CallParams::encodeString).collect(Collectors.toList());
 
-        addParamType("string[" + fixedLen + "]");
-        // argument is dynamic in that the encoded size is not fixed
-        args.add(new Argument(argBytes, true));
+      argBytes1 = encodeDynArr(byteStrings1, false);
 
-        return this;
-    }
+      addParamType("string[" + fixedLen + "]");
+      // argument is dynamic in that the encoded size is not fixed
+      args.add(new Argument(argBytes1, true));
 
-    /**
-     * Add a parameter of type {@code bytes}, a byte-string.
-     */
+      return this;
+    }/*addStringArray*/
+
+    /**Add a parameter of type {@code bytes}, a byte-string.*/
     public CallParams<Kind> addBytes(byte[] param) {
         addParamType("bytes");
         args.add(new Argument(encodeBytes(param), true));
-
         return this;
-    }
+    }/*addBytes*/
 
-    /**
-     * Add a parameter of type {@code bytesN}, a fixed-length byte-string.
+    /**Add a parameter of type {@code bytesN}, a fixed-length byte-string.
      * <p>
      * Only strings up to 32 bytes are permitted.
-     *
      * @throws IllegalArgumentException if {@code param.length != fixedLen}
-     *                                  or if {@code fixedLen > 32}
-     */
+     *                                  or if {@code fixedLen > 32}*/
     public CallParams<Kind> addBytes(byte[] param, int fixedLen) {
-        checkFixedArrayLen(fixedLen, param);
-        if (fixedLen > 32) {
-            throw new IllegalArgumentException(
-                "bytesN cannot have a length greater than 32; given length: " + fixedLen);
-        }
+      checkFixedArrayLen(fixedLen, param);
+      if (fixedLen > 32) {
+          throw new IllegalArgumentException(
+              "bytesN cannot have a length greater than 32; given length: " + fixedLen);
+      }
 
-        addParamType("bytes[" + fixedLen + "]");
-        // the bytesN type is fixed size
-        args.add(new Argument(rightPad32(ByteString.copyFrom(param)), false));
+      addParamType("bytes[" + fixedLen + "]");
+      // the bytesN type is fixed size
+      args.add(new Argument(rightPad32(ByteString.copyFrom(param)), false));
 
-        return this;
-    }
+      return this;
+    }/*addBytes*/
 
     /**
      * Add a parameter of type {@code bytes[]}, an array of byte-strings.
