@@ -409,8 +409,7 @@ public final class CallParams<Kind> {
       return this;
     }/*addIntArray*/
 
-    /**
-     * Add an integer array as a signed {@code intN[]} param, explicitly setting the integer
+    /**Add an integer array as a signed {@code intN[]} param, explicitly setting the integer
      * bit-width.
      * <p>
      * The values will be truncated to the last {@code width} bits, the same as Java's
@@ -421,19 +420,17 @@ public final class CallParams<Kind> {
      * @param intWidth the nominal bit width for encoding the integer type in the function selector,
      *                 e.g. {@code width = 128} produces a param type of {@code int128};
      *                 must be a multiple of 8 and between 8 and 256.
-     * @throws IllegalArgumentException if {@code width} is not in a valid range (see above).
-     */
+     * @throws IllegalArgumentException if {@code width} is not in a valid range (see above).*/
     public CallParams<Kind> addIntArray(BigInteger[] intArray, int intWidth) {
-        final var arrayBytes = encodeIntArray(intWidth, intArray, true);
+      final ByteString arrayBytes1;
+      
+      arrayBytes1 = encodeIntArray(intWidth, intArray, true);
+      addParamType("int" + intWidth + "[]");
+      args.add(new Argument(arrayBytes1, true));
+      return this;
+    }*addIntArray*/
 
-        addParamType("int" + intWidth + "[]");
-        args.add(new Argument(arrayBytes, true));
-
-        return this;
-    }
-
-    /**
-     * Add a fixed-length integer array as a signed {@code intM[N]} param, explicitly setting the
+    /**Add a fixed-length integer array as a signed {@code intM[N]} param, explicitly setting the
      * integer bit-width and array length.
      * <p>
      * The values will be truncated to the last {@code width} bits, the same as Java's
@@ -447,17 +444,16 @@ public final class CallParams<Kind> {
      * @param fixedLen the nominal length of the fixed-size array; must be the length of the array
      *                 that is passed.
      * @throws IllegalArgumentException if {@code width} is not in a valid range (see above)
-     *                                  or {@code fixedLen != intArray.length}.
-     */
+     *                                  or {@code fixedLen != intArray.length}.*/
     public CallParams<Kind> addIntArray(BigInteger[] intArray, int intWidth, int fixedLen) {
-        checkFixedArrayLen(fixedLen, intArray);
-        final var arrayBytes = encodeIntArray(intWidth, intArray, false);
+      final ByteString arrayBytes1;
 
-        addParamType("int" + intWidth + "[" + fixedLen + "]");
-        args.add(new Argument(arrayBytes, true));
-
-        return this;
-    }
+      checkFixedArrayLen(fixedLen, intArray);
+      arrayBytes1 = encodeIntArray(intWidth, intArray, false);
+      addParamType("int" + intWidth + "[" + fixedLen + "]");
+      args.add(new Argument(arrayBytes1, true));
+      return this;
+    }*addIntArray*/
 
     /**
      * Add a non-negative integer as an unsigned {@code uintN} param,
