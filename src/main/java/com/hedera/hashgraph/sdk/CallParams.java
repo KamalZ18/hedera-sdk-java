@@ -36,12 +36,10 @@ public final class CallParams<Kind> {
         this.funcSelector = funcSelector;
     }
 
-    /**
-     * Create a new function call builder for a smart contract constructor.
-     */
+    /**Create a new function call builder for a smart contract constructor.*/
     public static CallParams<Constructor> constructor() {
         return new CallParams<>(null);
-    }
+    }/*CallParams constructor*/
 
     /**
      * Create a new function call builder for a smart contract function.
@@ -57,21 +55,18 @@ public final class CallParams<Kind> {
         if (funcSelector != null) {
             funcSelector.addParamType(paramType);
         }
-    }
+    }/*addParamType*/
 
-    /**
-     * Add a parameter of type {@code string}.
+    /**Add a parameter of type {@code string}.
      * <p>
      * For Solidity addresses, use {@link #addAddress(byte[])}.
-     *
-     * @return {@code this} for fluent usage
-     */
+     * @return {@code this} for fluent usage*/
     public CallParams<Kind> addString(String param) {
         addParamType("string");
         args.add(new Argument(encodeString(param), true));
 
         return this;
-    }
+    }/*addString*/
 
     private static ByteString encodeString(String string) {
       final ByteString strBytes;
@@ -477,7 +472,7 @@ public final class CallParams<Kind> {
         args.add(new Argument(int256(uint, width), false));
 
         return this;
-    }
+    }/*addUint*/
 
     /**
      * Add an arbitrary precision non-negative integer as an unsigned {@code uintN} param,
@@ -503,7 +498,7 @@ public final class CallParams<Kind> {
         args.add(new Argument(uint256(uint), false));
 
         return this;
-    }
+    }/*addUint*/
 
     /**
      * Add an array of non-negative integers as an unsigned {@code intN[]} param, explicitly setting
@@ -522,13 +517,13 @@ public final class CallParams<Kind> {
      *                                  or {@code fixedLen != intArray.length}.
      */
     public CallParams<Kind> addUintArray(long[] uintArray, int intWidth) {
-        final var arrayBytes = encodeUintArray(intWidth, uintArray, true);
+      final ByteString arrayBytes1;
 
-        addParamType("uint" + intWidth + "[]");
-        args.add(new Argument(arrayBytes, true));
-
-        return this;
-    }
+      arrayBytes1 = encodeUintArray(intWidth, uintArray, true);
+      addParamType("uint" + intWidth + "[]");
+      args.add(new Argument(arrayBytes1, true));
+      return this;
+    }/*addUintArray*/
 
     /**
      * Add a fixed-length array of non-negative integers as an unsigned {@code intM[N]} param,
