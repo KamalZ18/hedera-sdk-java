@@ -525,8 +525,7 @@ public final class CallParams<Kind> {
       return this;
     }/*addUintArray*/
 
-    /**
-     * Add a fixed-length array of non-negative integers as an unsigned {@code intM[N]} param,
+    /**Add a fixed-length array of non-negative integers as an unsigned {@code intM[N]} param,
      * explicitly setting the integer bit-width and array length.
      * <p>
      * The values will be truncated to the last {@code width} bits, the same as Java's
@@ -541,20 +540,18 @@ public final class CallParams<Kind> {
      *                 that is passed.
      * @throws IllegalArgumentException if any value is less than 0,
      *                                  {@code width} is not in a valid range (see above),
-     *                                  or {@code fixedLen != intArray.length}.
-     */
+     *                                  or {@code fixedLen != intArray.length}.*/
     public CallParams<Kind> addUintArray(long[] intArray, int intWidth, int fixedLen) {
-        checkFixedArrayLen(fixedLen, intArray);
-        final var arrayBytes = encodeUintArray(intWidth, intArray, false);
+      final ByteString arrayBytes1;
 
-        addParamType("uint" + intWidth + "[" + fixedLen + "]");
-        args.add(new Argument(arrayBytes, true));
+      checkFixedArrayLen(fixedLen, intArray);
+      arrayBytes1 = encodeUintArray(intWidth, intArray, false);
+      addParamType("uint" + intWidth + "[" + fixedLen + "]");
+      args.add(new Argument(arrayBytes1, true));
+      return this;
+    }/*addUintArray*/
 
-        return this;
-    }
-
-    /**
-     * Add an array of arbitrary precision non-negative integers as an unsigned {@code intN[]}
+    /**Add an array of arbitrary precision non-negative integers as an unsigned {@code intN[]}
      * param, explicitly setting the integer bit-width.
      * <p>
      * The values will be truncated to the last {@code width} bits, the same as Java's
@@ -567,19 +564,17 @@ public final class CallParams<Kind> {
      *                 must be a multiple of 8 and between 8 and 256.
      * @throws IllegalArgumentException if any value is less than 0, or has a
      *                                  {@link BigInteger#bitLength()} greater than {@code width},
-     *                                  or if {@code width} is not in a valid range (see above).
-     */
+     *                                  or if {@code width} is not in a valid range (see above).*/
     public CallParams<Kind> addUintArray(BigInteger[] intArray, int intWidth) {
-        final var arrayBytes = encodeUintArray(intWidth, intArray, true);
+      final ByteString arrayBytes1;
 
-        addParamType("uint" + intWidth + "[]");
-        args.add(new Argument(arrayBytes, true));
+      arrayBytes1 = encodeUintArray(intWidth, intArray, true);
+      addParamType("uint" + intWidth + "[]");
+      args.add(new Argument(arrayBytes1, true));
+      return this;
+    }/*addUintArray*/
 
-        return this;
-    }
-
-    /**
-     * Add a fixed-length array of arbitrary precision non-negative integers as an unsigned
+    /**Add a fixed-length array of arbitrary precision non-negative integers as an unsigned
      * {@code intM[N]} param, explicitly setting the integer bit-width and array length.
      * <p>
      * The values will be truncated to the last {@code width} bits, the same as Java's
@@ -594,25 +589,21 @@ public final class CallParams<Kind> {
      *                 that is passed.
      * @throws IllegalArgumentException if any value is less than 0, or has a
      *                                  {@link BigInteger#bitLength()} greater than {@code width},
-     *                                  or if {@code width} is not in a valid range (see above).
-     */
+     *                                  or if {@code width} is not in a valid range (see above).*/
     public CallParams<Kind> addUintArray(BigInteger[] intArray, int intWidth, int fixedLen) {
-        checkFixedArrayLen(fixedLen, intArray);
-        final var arrayBytes = encodeUintArray(intWidth, intArray, false);
+      final ByteString arrayBytes1;
 
-        addParamType("uint" + intWidth + "[" + fixedLen + "]");
-        args.add(new Argument(arrayBytes, true));
+      checkFixedArrayLen(fixedLen, intArray);
+      arrayBytes1 = encodeUintArray(intWidth, intArray, false);
+      addParamType("uint" + intWidth + "[" + fixedLen + "]");
+      args.add(new Argument(arrayBytes1, true));
+      return this;
+    }/*addUintArray*/
 
-        return this;
-    }
-
-    /**
-     * The length of a Solidity address in bytes.
-     */
+    /** The length of a Solidity address in bytes.*/
     public static final int ADDRESS_LEN = SolidityUtil.ADDRESS_LEN;
-    /**
-     * The length of a hexadecimal-encoded Solidity address, in ASCII characters (bytes).
-     */
+
+    /** The length of a hexadecimal-encoded Solidity address, in ASCII characters (bytes).*/
     public static final int ADDRESS_LEN_HEX = SolidityUtil.ADDRESS_LEN_HEX;
 
     /**
