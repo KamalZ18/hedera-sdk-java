@@ -423,7 +423,7 @@ public final class CallParams<Kind> {
       addParamType("int" + intWidth + "[]");
       args.add(new Argument(arrayBytes1, true));
       return this;
-    }*addIntArray*/
+    }/*addIntArray*/
 
     /**Add a fixed-length integer array as a signed {@code intM[N]} param, explicitly setting the
      * integer bit-width and array length.
@@ -448,7 +448,7 @@ public final class CallParams<Kind> {
       addParamType("int" + intWidth + "[" + fixedLen + "]");
       args.add(new Argument(arrayBytes1, true));
       return this;
-    }*addIntArray*/
+    }/*addIntArray*/
 
     /**
      * Add a non-negative integer as an unsigned {@code uintN} param,
@@ -623,40 +623,38 @@ public final class CallParams<Kind> {
         args.add(new Argument(leftPad32(ByteString.copyFrom(address)), false));
 
         return this;
-    }
+    }/*addAddress*/
 
-    /**
-     * Add a {@value ADDRESS_LEN_HEX}-character hex-encoded Solidity address parameter with the type
+    /**Add a {@value ADDRESS_LEN_HEX}-character hex-encoded Solidity address parameter with the type
      * {@code address}.
      * <p>
      * Note: adding a {@code address payable} or {@code contract} parameter must also use
      * this function as the ABI does not support those types directly.
      *
      * @throws IllegalArgumentException if the address is not exactly {@value ADDRESS_LEN_HEX}
-     *                                  characters long or fails to decode as hexadecimal.
-     */
+     *                                  characters long or fails to decode as hexadecimal.*/
     public CallParams<Kind> addAddress(String address) {
         return addAddress(decodeAddress(address));
-    }
+    }/*addAddress*/
 
-    /**
-     * Add an array of {@value ADDRESS_LEN}-byte Solidity addresses as a {@code address[]} param.
+    /**Add an array of {@value ADDRESS_LEN}-byte Solidity addresses as a {@code address[]} param.
      *
      * @throws IllegalArgumentException if any value is not exactly {@value ADDRESS_LEN} bytes long.
-     * @throws NullPointerException     if any value in the array is null.
-     */
+     * @throws NullPointerException     if any value in the array is null.*/
     public CallParams<Kind> addAddressArray(byte[][] addresses) {
-        final var addressArray = encodeArray(
-            Arrays.stream(addresses).map(a -> {
+	    final ByteString addressArray1;
+
+      addressArray1 = encodeArray(
+             Arrays.stream(addresses).map(a -> {
                 checkAddressLen(a);
                 return leftPad32(ByteString.copyFrom(a));
-            }), true);
+             }), true);
 
-        addParamType("address[]");
-        args.add(new Argument(addressArray, true));
+      addParamType("address[]");
+      args.add(new Argument(addressArray1, true));
 
-        return this;
-    }
+      return this;
+    }/*addAddressArray*/
 
     /**
      * Add a fixed-length array of {@value ADDRESS_LEN}-byte Solidity addresses as a
